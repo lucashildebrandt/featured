@@ -17,7 +17,87 @@ macro bind(def, element)
 end
 
 # ╔═╡ 185941f6-8fc1-49f7-bc7f-37ffc51d6664
-using Plots, PlutoUI, DataFrames
+using Plots, PlutoUI, DataFrames, LaTeXStrings, ColorSchemes
+
+# ╔═╡ 784c8ee4-df28-4bd8-bff7-f3bb2d097b12
+md"""
+## Simulating Titrations
+"""
+
+# ╔═╡ ee2a647a-0cba-46c6-afb0-ba16bf0f0150
+md"""
+Titrations are used to analyse samples and determine unknown concentrations. One of the most common types of titration is the acid-base titration. To find out the concentration of an analyte, f.e. an acid like hydrochloric acid (HCl), a titrant solution, f.e. a base like sodium hydroxide (NaOH), with a known concentration is used. The base and acid react with each other in a neutralisation reaction to form water.
+
+``\mathrm{H_{3}O^{+}} + \mathrm{OH^{-}} \rightarrow \mathrm{H_{2}O}``
+
+By meassuring how much base is needed to convert the acid completly, the concentration of the acid is determined.
+
+Note, that this is a very brief explanation to illustrate the key idea of titrations and is in this form only valid for strong acids and bases. Strong acids and bases dissociate completly, while weaker acids and bases do not. Therefore, the concentration of ``\mathrm{H_{3}O^{+}}`` is equal to the concentration of acid. There are some cases, like weak acids and di- or triprotonic acids, where the chemistry is a bit more complex. We will look at some of these cases later.
+"""
+
+# ╔═╡ 83a21840-a772-469e-999d-c066f60e2e0e
+md"""
+The experiment is done with a so called burette, which can be seen in the picture below. It allows the base to be added in very small steps, most common up to ``0.1~\mathrm{mL}``. 
+"""
+
+# ╔═╡ 7705230b-91dc-4851-9e1b-37a642e66657
+Resource(
+	"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Acid_and_Base_Titration.jpg/250px-Acid_and_Base_Titration.jpg",
+	:alt => "Burette and erlenmeyer flask",
+	:width => 200 
+)
+
+# ╔═╡ ad925028-59c3-433d-a54a-3f644d11b639
+md"""
+To see, if the acid is completly converted, the pH value at each point of added base can be meassured with a pH electrode. This allows the plotting of a titration curve. The inflection point of this curve is the equivalence point. At this point, the acid is completly reacted completly with the added base. Because in this example a titration of a strong acid (HCl) and strong base (NaOH) is shown, the neutralisation results in a neutral sodium chloride solution (NaCl) and therefore the equivalence point is at pH 7.
+"""
+
+# ╔═╡ 8cea32f9-a670-4269-a586-c7bdb339a80d
+begin
+	begin
+		pointX_ex = 25.0
+		v_Base_end_ex = 25 * 0.1 / 0.1 * 2
+		v_Base_ex::Vector{Float64} = collect(0:0.1:v_Base_end_ex)
+	end
+	function calc_pH_ex(v_Base_added_ex::Float64) #v später die Elemente des Vectors v_Base
+		if v_Base_added_ex*0.1 <= 25*0.1
+			c_H_ex::Float64 = ((0.1 * 25 - 0.1 * v_Base_added_ex) / (25 + v_Base_added_ex)) + 10^(-7)
+		else
+			c_OH⁻_ex = (0.1 * v_Base_added_ex - 0.1 * 25) / (25 + v_Base_added_ex)
+			c_H_ex = 10^(-14) / c_OH⁻_ex
+		end
+		pH = -log(10, c_H_ex)
+	end
+	#########
+	pH_total_ex = map(calc_pH_ex, v_Base_ex)
+	pH_Value_ex = round(calc_pH_ex(pointX_ex), sigdigits=3)
+
+	plot_attrs_ex = (
+	    legend=:bottomright,
+	    xlabel="Added volume of titrant / [L]",
+	    ylabel="pH-Value",
+		xlims=(-1,v_Base_end_ex+2),
+		ylims=(0, 14),
+		# xticks=0:0.005:0.06,
+		title="Titration curve of 0.1 M HCl against 0.1 M NaOH",
+	    # draw_arrow=true,
+	)
+	# axis_attrs = (draw_arrow=true) #Funktioniert iwie nicht
+	plot(v_Base_ex, pH_total_ex, label="titration curve", linewidth=2;plot_attrs_ex...)
+	scatter!([pointX_ex], [calc_pH_ex(pointX_ex)], label="Equivalence point")
+end
+
+# ╔═╡ 7205b4a5-d032-43c6-8232-a5d3cffb29d6
+md"""
+The shape of the curve can be explained by the logarithmic nature of the pH scale. The pH Value of a solution is defined as
+``\mathrm{pH} = -\log{\mathrm{c(H_{3}O^{+})}}``.
+When 90 % of the acid is neutralised, the pH value is changed by one unit. When further 9 % are neturalised and overall 99 % acid is converted, the ph value changes by another unit. Next, only 0.9 % more acid needs to be converted, to change the pH value by another value. Because of this logarithmic behaviour, the pH value does not change much at the beginning of the titration. As we get closer to the equivalence point, the pH value rises quicker until there is a jump around the equivalence point.
+"""
+
+# ╔═╡ 7f5a2d2a-62fe-4985-b0fb-8559d9124801
+md"""
+Another way of determining the equivalence point is by using a pH indicator. These are chemical compunds which change colour depending on the pH value of their environement. Every
+"""
 
 # ╔═╡ 7c465102-7d68-4827-bd8e-ed8e8ef0e303
 # ╠═╡ disabled = true
@@ -43,6 +123,7 @@ md"Here is a table with some acids and their acid constants (``pK_{a}``)."
 begin 
 	df = DataFrame(Dict("Acid" => ["HCl","HNO2","HF","HCOOH","CH3COOH"], "pKa" => [-6.0,3.15,3.17,3.75,4.76]))
 	#show(df, show_row_number=false) not possible, show() gives Output in Terminal. Also the Strings are dispalyed with "" => Ask Fons
+	# With LatexStrings (L"") possible to display pretteir, but then the connection to the dropdown menu is more difficult
 end
 
 # ╔═╡ eb8979e7-b163-435d-a909-f020194ffc15
@@ -52,6 +133,12 @@ Here you can choose from one of the given acids.
 
 # ╔═╡ 563df061-7e97-4745-b101-cf4aa200da60
 @bind Acid Select(["HCl","HNO2","HF","HCOOH","CH3COOH"])
+
+# ╔═╡ 2fa64b35-dd26-4afa-824e-5487ae47b322
+# ╠═╡ disabled = true
+#=╠═╡
+@bind Acid Select([L"\mathrm{HCl}",L"\mathrm{HNO2}",L"\mathrm{HF}",L"\mathrm{HCOOH}",L"\mathrm{CH_{3}COOH}"])
+  ╠═╡ =#
 
 # ╔═╡ d6c30bd1-ebbe-4a8c-8b28-4f089c4d36a2
 md"""
@@ -79,7 +166,7 @@ Next, you need to know the concentration of your titrant, in this example the ba
 @bind c0_Base_string TextField(default="0.1")
 
 # ╔═╡ 116a4242-8e26-437d-8ac2-5af5cef9c095
-#Defining constants and parameters (Acid and Base constants, conentrations and volumes)
+#Defining constants and parameters (Acid and Base constants, concentrations and volumes)
 begin
 	pKa = filter(row -> row."Acid" == Acid, df)."pKa"[1]; nothing
 	Ka = 10^(-pKa)
@@ -126,7 +213,7 @@ end ; nothing
 # ╔═╡ a44c8c13-006c-482c-b333-240cb3582f7b
 # ╠═╡ disabled = true
 #=╠═╡
-calc_pH(24.69)
+calc_pH(25.0)
   ╠═╡ =#
 
 # ╔═╡ 7cab03c4-048d-4df7-a3a5-b20dfd1e6e9d
@@ -140,7 +227,7 @@ Here you can track the titration by visualising the point in the titration curve
 """
 
 # ╔═╡ 831198d1-d22c-42b5-a198-3bd34139eb0e
-@bind pointX Slider(0:0.1:v_Base_end)
+@bind pointX Slider(0:0.05:v_Base_end)
 
 # ╔═╡ 02c0320c-7c56-4fe5-8f8c-9ab0f733b28e
 begin
@@ -151,7 +238,7 @@ begin
 	
 		plot_attrs = (
 		    legend=:bottomright,
-		    xlabel="Added volume of titrant / [L]",
+		    xlabel="Added volume of titrant / [mL]",
 		    ylabel="pH-Value",
 			xlims=(-1,v_Base_end+2),
 			ylims=(0, 14),
@@ -169,15 +256,87 @@ end
 # ╔═╡ 9dee0462-b5af-4962-a65b-7ac7b2faf3df
 println("At this point, $pointX millilitre of titrant were added. The pH Value of the \nsolution is $pH_Value.")
 
+# ╔═╡ b6d6c22c-a2b4-4bcb-a1da-a8f9f8d4ae99
+md"""
+### Indicators
+"""
+
+# ╔═╡ 6ebfa6d8-b4a7-4d5e-8d3d-ccf0ba596f25
+begin 
+	begin #The indicators with their pH range and their colors
+		Methyl_orange = ColorScheme(range(colorant"red", colorant"yellow", length=130));
+		Litmus = ColorScheme(range(colorant"red", colorant"blue", length=300));
+		Bromothymol_blue = ColorScheme(range(colorant"yellow", colorant"blue", length=160)); 
+		Phenolphthalein = ColorScheme(range(colorant"white", colorant"magenta", length=180));
+		Alizarin_yellow = ColorScheme(range(colorant"yellow", colorant"red", length=190)); nothing
+	end
+	# Indexing Methyl Orange
+	if pH_Value < 3.10
+		a::Int64 = 1
+	elseif 3.10 <= pH_Value < 4.40
+		a::Int64 = Int64(round(100*pH_Value - 309))
+	elseif pH_Value >= 4.40
+		a::Int64 = size(Methyl_orange)
+	end
+	# Indexing Litmus
+	if pH_Value < 5.00
+		b::Int64 = 1
+	elseif 5.00 <= pH_Value < 8.00
+		b::Int64 = Int64(round(100*pH_Value - 499))
+	elseif pH_Value >= 8.00
+		b::Int64 = size(Litmus)
+	end
+	# Indexing Bromothymol Blue
+	if pH_Value < 6.00
+		c::Int64 = 1
+	elseif 6.00 <= pH_Value < 7.60
+		c::Int64 = Int64(round(100*pH_Value - 599))
+	elseif pH_Value >= 7.60
+		c::Int64 = size(Bromothymol_blue)
+	end
+	# Indexing Phenolphthalein
+	if pH_Value < 8.30
+		d::Int64 = 1
+	elseif 8.30 <= pH_Value < 10.00
+		d::Int64 = Int64(round(100*pH_Value - 829))
+	elseif pH_Value >= 10.00
+		d::Int64 = size(Phenolphthalein)
+	end
+	# Indexing Alizarin yellow
+	if pH_Value < 10.10
+		e::Int64 = 1
+	elseif 10.10 <= pH_Value < 12.00
+		e::Int64 = Int64(round(100*pH_Value - 1009))
+	elseif pH_Value >= 12.00
+		e::Int64 = size(Alizarin_yellow)
+	end
+	# Output of the Indicatorcolour in a Dataframe
+	begin
+		df_color = DataFrame(Dict(
+			"Methyl orange" => [Methyl_orange[a]],
+			"Litmus" => [Litmus[b]],
+			"Bromothymol blue" => [Bromothymol_blue[c]],
+			"Phenolphthalein" => [Phenolphthalein[d]],
+			"Alizarin yellow" => [Alizarin_yellow[e]]
+								))
+		desired_order = ["Methyl orange", "Litmus", "Bromothymol blue", "Phenolphthalein", "Alizarin yellow"]
+		df_color = df_color[:, desired_order]
+	end
+end
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
+ColorSchemes = "~3.30.0"
 DataFrames = "~1.5.0"
+LaTeXStrings = "~1.4.0"
 Plots = "~1.40.19"
 PlutoUI = "~0.7.71"
 """
@@ -188,7 +347,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.6"
 manifest_format = "2.0"
-project_hash = "25c30e0ce71e5abb37393560997f97856c6b6de8"
+project_hash = "cc0e0e2d35f10eb62bbd02caa3d07856860754e1"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -1407,11 +1566,20 @@ version = "1.9.2+0"
 
 # ╔═╡ Cell order:
 # ╠═185941f6-8fc1-49f7-bc7f-37ffc51d6664
+# ╟─784c8ee4-df28-4bd8-bff7-f3bb2d097b12
+# ╟─ee2a647a-0cba-46c6-afb0-ba16bf0f0150
+# ╟─83a21840-a772-469e-999d-c066f60e2e0e
+# ╟─7705230b-91dc-4851-9e1b-37a642e66657
+# ╟─ad925028-59c3-433d-a54a-3f644d11b639
+# ╟─8cea32f9-a670-4269-a586-c7bdb339a80d
+# ╟─7205b4a5-d032-43c6-8232-a5d3cffb29d6
+# ╟─7f5a2d2a-62fe-4985-b0fb-8559d9124801
 # ╟─7c465102-7d68-4827-bd8e-ed8e8ef0e303
 # ╟─753ed8ab-bb6c-4cb6-bb37-3b123e09e5dc
-# ╠═fa8df29f-be0a-498d-8fac-4cbe016f034a
+# ╟─fa8df29f-be0a-498d-8fac-4cbe016f034a
 # ╟─eb8979e7-b163-435d-a909-f020194ffc15
 # ╟─563df061-7e97-4745-b101-cf4aa200da60
+# ╠═2fa64b35-dd26-4afa-824e-5487ae47b322
 # ╟─d6c30bd1-ebbe-4a8c-8b28-4f089c4d36a2
 # ╟─006a4f14-2cd1-439f-8b64-aab99601aba8
 # ╟─41536d79-8949-42ea-971c-8069918c455d
@@ -1424,8 +1592,10 @@ version = "1.9.2+0"
 # ╠═a44c8c13-006c-482c-b333-240cb3582f7b
 # ╟─7cab03c4-048d-4df7-a3a5-b20dfd1e6e9d
 # ╟─f2b5c3e7-29c1-4f7b-82bb-cfa8da90d494
-# ╟─831198d1-d22c-42b5-a198-3bd34139eb0e
+# ╠═831198d1-d22c-42b5-a198-3bd34139eb0e
 # ╟─02c0320c-7c56-4fe5-8f8c-9ab0f733b28e
 # ╟─9dee0462-b5af-4962-a65b-7ac7b2faf3df
+# ╟─b6d6c22c-a2b4-4bcb-a1da-a8f9f8d4ae99
+# ╟─6ebfa6d8-b4a7-4d5e-8d3d-ccf0ba596f25
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
