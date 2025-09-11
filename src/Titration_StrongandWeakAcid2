@@ -33,7 +33,7 @@ In this notebook, we want to see how the interactive and reactive features of Pl
 
 !!! question "Is this for me?"
 	
-	This notebook is intended for highschool students, university students studying chemistry or another natural science, or others who are just interested to see what this notebook has to offer. Basic chemistry knowledge is recommended (f.e. knowing what an acid and base is, what the pH scale is etc.), but feel free to give the notebook a try if it is not the case.
+	This notebook is intended for highschool students, university students studying chemistry or another natural science, or others who are just interested to see what this notebook has to offer. Basic chemistry knowledge is recommended (f.e. knowing what an acid and base is, what the pH scale is etc.), but some short reminders are included. Feel free to give the notebook a try if it is not the case.
 
 	For those with further interest in how the titration curves were plotted, check out the code in combination to the appendix at the end of the notebook.
 """
@@ -48,20 +48,20 @@ md"""
 md"""
 Titrations are used to analyse samples and determine unknown concentrations. One of the most common types of titration is the acid-base titration. To find out the concentration of an analyte, f.e. an acid like hydrochloric acid (HCl), a titrant solution, f.e. a base like sodium hydroxide (NaOH), with a known concentration is used. The base and acid react with each other in a neutralisation reaction to form water.
 
-``
+```math
 \mathrm{H_{3}O^{+}} + \mathrm{OH^{-}} \rightarrow \mathrm{H_{2}O}
-``
+```
 
 By meassuring how much base is needed to convert the acid completly, the concentration of the acid is determined.
 
 !!! question "Is that always the case?"
-	This is a very brief explanation to illustrate the key idea of titrations and is in this form only valid for strong acids and bases. Strong acids and bases dissociate completly, while weaker acids and bases do not. Therefore, only for strong acids the concentration of hydronium ions (``\mathrm{H_{3}O^{+}}``) is equal to the concentration of acid (``\mathrm{HAc}`` in general form).
+	This is a very brief explanation to illustrate the key idea of titrations and is in this form only valid for very strong acids and bases, which dissociate completly, while weaker acids and bases do not. Therefore, only for very strong acids the concentration of hydronium ions (``\mathrm{H_{3}O^{+}}``) is equal to the concentration of acid (``\mathrm{HA}`` in general form).
 
-	``
-	c\mathrm{(H_3O^+)} = c\mathrm{(HAc)}
-	``
+	```math
+	c\mathrm{(H_3O^+)} = c\mathrm{(HA)}
+	```
 
-	There are some cases, like weak acids and di- or triprotonic acids, where the chemistry is a bit more complex. We will look at some of these cases later.
+	For the other cases (weaker acids, di- or triprotonic acids etc.) the chemistry is a bit more complex. We will look at some of these cases later.
 """
 
 # ╔═╡ 83a21840-a772-469e-999d-c066f60e2e0e
@@ -83,12 +83,12 @@ md"""
 
 # ╔═╡ 7c79ba77-e2b6-4e0d-8522-f0b540e6815f
 md"""
-#### Strong acids
+#### Very strong acids
 """
 
 # ╔═╡ ad925028-59c3-433d-a54a-3f644d11b639
 md"""
-To see, if the acid is completly converted, the pH value at each point of added base can be meassured with a pH electrode.
+To see, if the acid is completly converted, the pH value at each point of added base can be measured with a pH electrode.
 This allows the plotting of a titration curve. The inflection point of this curve is the equivalence point. At this point, the acid is completly reacted completly with the added base. Because in this example a titration of a strong acid (HCl) and strong base (NaOH) is shown, the neutralisation results in a neutral sodium chloride solution (NaCl) and therefore the equivalence point is at pH 7.
 """
 
@@ -131,33 +131,68 @@ md"""
 !!! question "Why is the curve shaped like this?"
 	The shape of the curve can be explained by the logarithmic nature of the pH scale. The pH value of a solution is defined as the *negative decadic logarithm* of the hydronium-ion concentration
 
-	``\mathrm{pH} = -\log{c\mathrm{(H_3O^+)}}``.
+	```math
+	\mathrm{pH} = -\log{c\mathrm{(H_3O^+)}}.
+	```
 
-	When 90 % of the acid is neutralised, the pH value is changed by one unit. When further 9 % are neturalised and overall 99 % acid is converted, the ph value changes by another unit. Next, only 0.9 % more acid needs to be converted, to change the pH value by another value. Because of this logarithmic behaviour, the pH value does not change much at the beginning of the titration. As we get closer to the equivalence point, the pH value rises quickly until there is a jump around the equivalence point. Afterwards the pH level rises because of the added base.
+	When 90 % of the acid is neutralised, the pH value is changed by one unit. When further 9 % are neutralised and overall 99 % acid is converted, the pH value changes by another unit. Next, only 0.9 % more acid needs to be converted, to change the pH value by another value. Because of this logarithmic behaviour, the pH value does not change much at the beginning of the titration. As we get closer to the equivalence point, the pH value rises quickly until there is a jump around the equivalence point. Afterwards the pH level rises because of the added base.
 """
 
 # ╔═╡ d9adecaa-6ae8-46d4-955f-4a89a82a46c9
 md"""
-#### Weak acids
+#### Strong and medium strong acids
 """
 
 # ╔═╡ 9264917e-724d-4220-bbee-ec026285e475
 md"""
 Lets take a look at weaker acids like acetic acid (``\mathrm{CH_3COOH}``). As mentioned before, they do not dissociate completly, but an equilibrium
 
-`` \mathrm{CH_3COOH} + \mathrm{H_2O} \longleftrightarrow \mathrm{CH_3COO^-} + \mathrm{H_3O^+}``
+```math
+\mathrm{CH_3COOH} + \mathrm{H_2O} \longleftrightarrow \mathrm{CH_3COO^-} + \mathrm{H_3O^+}
+```
 
 is formed. As every equilibrium, it can be described by an equilibrium constant ``K``. In the case of an acid, it is called the acid constant ``K_{\mathrm{a}}``. As seen before, while the concentration of hydronium-ions is often represented by the negative decadic logarithm, in the same fashion ``K_{\mathrm{a}}`` is often represented as
 
-``\mathrm{p}K\mathrm{_a} = -\log{K_{\mathrm{a}}}``.
+```math
+\mathrm{p}K\mathrm{_a} = -\log{K_{\mathrm{a}}}.
+```
 
+These constants describe the strength of the acids. The lower the ``\mathrm{p}K\mathrm{_a}``, the stronger the acid. The classification of acids is as follows: very strong acids: ``\mathrm{p}K\mathrm{_a} < 0``, strong acids: ``0 < \mathrm{p}K\mathrm{_a} < 3`` and medium strong acids: ``3 < \mathrm{p}K\mathrm{_a} < 7``.
+"""
+
+# ╔═╡ 4882a030-f1d6-4b8b-a86f-a20e64fe4a6c
+#Test von Tabellen #Only with 1 proton
+md"""
+Here is a table with some monoprotonic acids and their ``\mathrm{p}K\mathrm{_a}`` values. 
+
+| Acid          		 | pKa     |
+| ---------------------- |:-------:| 
+| ``\mathrm{HClO_4}``    | ``-10`` |
+| ``\mathrm{HCl}``       | ``-6``  |
+| ``\mathrm{HSO_4^-}``   | ``1.92``|
+| ``\mathrm{HNO_{2}}``   | ``3.15``|
+| ``\mathrm{HF}``        | ``3.17``| 
+| ``\mathrm{HCOOH}``     | ``3.75``| 
+| ``\mathrm{CH_{3}COOH}``| ``4.76``| 
+"""
+
+# ╔═╡ 733fe755-796d-41db-883a-cfc8d7d077a4
+md"""
 Let's compare the titration curve below for acetic acid with the titration curve for hydrochloric acid
 
 !!! info "Differences between titration curves for strong and weak acids"
 
-	1) The pH value at the start is higher, although in both cases the starting concentration of the acid is ``c_0\mathrm{(HAc)} = 0.1~\mathrm{M}``. Of course, this is because the weaker acid does not dissociate completly and forms less hydronium ions with water.
-	2) After the curves rises, there is a flat section
+	1) The pH value at the **start** is higher, although in both cases the starting concentration of the acid is ``c_0\mathrm{(HA)} = 0.1~\mathrm{M}``. Of course, this is the case because the weaker acid does not dissociate completly and forms less hydronium ions with water.
 
+	2) After the curve rises, there is a flat section where the pH value does not change much by adding base. This is the **buffer region** of the titration. Adding NaOH to the analyte solution leads to the formation of a sodium acetate solution (`` \mathrm{Na^+} + \mathrm{^-OOCCH_3}``), where the acetate anion is the conjugated base to acetic acid. Solutions consisting of a weak acid and its conjugated base are called buffer solutions. Further added acids or bases dont react with water or hydronium ions to further change the pH value, but react with the pair of weak acid and conjugated base first. The pH value in this region is described by the *Henderson-Hasselbalch equation*\
+	```math
+		\mathrm{pH} = \mathrm{p}K_{\mathrm{a}} + \log{\frac{c(\mathrm{A^-})}{c(\mathrm{HA})}}.
+	```
+	3) In the middle of the buffer region, there is a point where ``c(\mathrm{A^-}) = c(\mathrm{HA})``. The argument of the logarithm becomes one and therefore the logarithmic term becomes zero. This is the **half equivalence point**, where ``\mathrm{pH} = \mathrm{p}K_{\mathrm{a}}``.
+
+	4) When the **equivalence point** is reached and acetic acid is completly converted to sodium acetate, the resulting solution is slightly basic, because acetate anions act as a weak base. For stronger conjugated bases or solutions of a higher concentration, the pH value at the equivalence point would be higher.
+
+	5) The section after the equivalence point does not differ much from the curve shown before, as in both cases ``\mathrm{NaOH}`` solution was added to a neutralised solution.
 """
 
 # ╔═╡ 6ba1348c-3cca-46a4-b109-bfb90f7ef7f2
@@ -168,18 +203,16 @@ begin
 	Kb_ex = 10^(-pKb_ex)
 
 	c0_H⁺_ex::Float64 = -Ka_ex/2 + sqrt(Ka_ex^2 / 4 + Ka_ex*0.1) #The starting concentration for protons (at the same time for the deprotonated acid)
-	c0_OH⁻_ex::Float64 = -Kb_ex/2 + sqrt(Kb_ex^2 / 4 + Kb_ex*0.1) # Concentration of OH⁻ at the EP, after the weak acid is completly neutralised
+	c0_OH⁻_ex::Float64 = -Kb_ex/2 + sqrt(Kb_ex^2 / 4 + Kb_ex*0.1) # Concentration of OH⁻ at the equivalence point (EP), after the weak acid is completly neutralised
 	function calc_pH_weak(v_Base_added_ex)
 		if v_Base_added_ex == 0.0 #at the starting point
 			pH = -log(10, c0_H⁺_ex)
-		elseif round((0.1 - c0_H⁺_ex)*25, digits=3) > round(0.1*v_Base_added_ex, digits=3) #between starting point and equivalence point
+		elseif round((0.1 - c0_H⁺_ex)*25, digits=3) > round(0.1*v_Base_added_ex, digits=3) #between starting point and EP
 			c_H⁺ = Ka_ex*(0.1*25/(c0_H⁺_ex*25+0.1*v_Base_added_ex) - 1)
 			pH = -log(10, c_H⁺)
-		elseif round((0.1-c0_H⁺_ex)*25, digits=3) == round(0.1*v_Base_added_ex, digits=3) #at the equivalence point
+		elseif round((0.1-c0_H⁺_ex)*25, digits=3) == round(0.1*v_Base_added_ex, digits=3) #at the EP
 			pH = 14 - (-log(10, c0_OH⁻_ex))
-			# global equivalence_volume = v_Base_added_ex
-			# println(equivalence_volume)
-		elseif round((0.1-c0_H⁺_ex)*25, digits=3) < round(0.1*v_Base_added_ex, digits=3) #after the equivalence point
+		elseif round((0.1-c0_H⁺_ex)*25, digits=3) < round(0.1*v_Base_added_ex, digits=3) #after the EP
 			c_OH⁻ = (0.1 * v_Base_added_ex - ((0.1-c0_H⁺_ex) * 25)) / (25 + v_Base_added_ex) + c0_OH⁻_ex
 			c_H⁺ = 10^(-14) / c_OH⁻
 			pH = -log(10, c_H⁺)
@@ -195,7 +228,6 @@ begin
 			global equivalence_volume_ex = i
 		end
 	end
-	#pointX_weak = equiva
 	#########
 	pH_total_weak = map(calc_pH_weak, v_Base_ex)
 	pH_Value_weak = round(calc_pH_weak(equivalence_volume_ex), sigdigits=3)
@@ -206,14 +238,12 @@ begin
 	    ylabel="pH-Value",
 		xlims=(-1,v_Base_end_ex+2),
 		ylims=(0, 14),
-		# xticks=0:0.005:0.06,
-		#title=L"\mathrm{Titration~curve~of~0.1~M~CH_{3}COOH~against~0.1~M~NaOH}",
-		title="Titration curve of 0.1 M CH3COOH against 0.1 M NaOH"
+		title=latexstring("\$\\mathrm{Titration~curve~of~0.1~M~CH_3COOH~against~0.1~M~NaOH}\$")
 	)
 	
 	plot(v_Base_ex, pH_total_weak, label="titration curve", linewidth=2;plot_attrs_weak...)
 	scatter!([equivalence_volume_ex], [calc_pH_weak(equivalence_volume_ex)], label="Equivalence point")
-	scatter!([half_equivalence_volume_ex], [calc_pH_weak(half_equivalence_volume_ex)], label="Halfequivalence point")
+	scatter!([half_equivalence_volume_ex], [calc_pH_weak(half_equivalence_volume_ex)], label="Half equivalence point")
 end
 
 # ╔═╡ 975a203f-e2d8-4f21-a4af-62212c7a9423
@@ -226,6 +256,40 @@ md"""
 Another way of determining the equivalence point is by using a pH indicator. These are chemical compounds which change colour depending on the pH value of their environement. Every indicator changes colour at a characteristic pH range.
 """
 # Die Farbgradienten zeigen und evtl die Reaktiona us dem Binnewies als PNG zeigen als Beispielstruktur und Reaktion.
+
+# ╔═╡ ffe30f1b-cde3-4f41-ac69-70f4d2634b3a
+begin
+	df_color_grad = DataFrame(Dict(
+		"Indicator" => [L"\text{Methyl orange}", L"\text{Litmus}", L"\text{Bromothymol blue}", L"\text{Phenolphthalein}", L"\text{Alizarin yellow}"],
+		"pH range" => [L"3.1 - 4.4", L"5.0 - 8.0", L"6.0 - 7.6", L"8.3 - 10.0", L"10.1 - 12.0"],
+		"Change in color" => [cgrad([:orange, :red]), cgrad([:red, :blue]), cgrad([:yellow, :blue]), cgrad([:white, :magenta]), cgrad([:yellow, :red])]
+	))
+
+	desired_order_grad = ["Indicator", "pH range", "Change in color"]
+	df_color_grad = df_color_grad[:, desired_order_grad]
+end
+
+# ╔═╡ b3420e1d-413e-463b-9bed-ac6182ce863a
+md"""
+Indicators themself are weak organic acids which form conjugated acid-base pairs, where acid and base are of different colors.
+As shown before for weak acids, an equilibrium is formed and it shifts when changing the pH value of the environment. 
+In the following picture, the acid-base pair for the indicator methyl red can be seen.
+"""
+
+# ╔═╡ 512a3218-e9e9-482e-b0b0-59650ea55fd1
+Resource(
+	"https://i.imgur.com/LxB3LeP.png",
+	:alt => "Structure of the corresponding aci-base pair of the indicator methyl red.",
+	:width => 700
+)
+
+# ╔═╡ 724c61e2-7237-4f3e-ab30-655164288aaf
+md"""
+To see the color of either the acid or base distinctively, one of them has to be present in tenfold excess.
+This is the reason why indicators change their colors inside a range of pH values and not at a single pH value, as this big change in concentrations is necessary.
+However, that is not a problem.
+As can be seen in the titration curves before, the jump in pH around the equivalence point is usually large enough.
+"""
 
 # ╔═╡ cd5bcc78-ad78-40c8-9356-140a04ea1a69
 md"""
@@ -240,25 +304,16 @@ md"""
 # ╔═╡ 7c465102-7d68-4827-bd8e-ed8e8ef0e303
 #Test von Tabellen #Only with 1 proton
 md"""
-Here is a table with some acids and their acid constants (pKa). 
-
-| Acid          		 | pKa     |
-| ---------------------- |:-------:| 
-| ``\mathrm{HCl}``       | ``-6``  |
-| ``\mathrm{HNO_{2}}``   | ``3.15``|
-| ``\mathrm{HF}``        | ``3.17``| 
-| ``\mathrm{HCOOH}``     | ``3.75``| 
-| ``\mathrm{CH_{3}OOH}`` | ``4.76``| 
+The table with some monoprotonic acids and their ``\mathrm{p}K\mathrm{_a}`` values is shown here again.
 """
-
-# ╔═╡ 753ed8ab-bb6c-4cb6-bb37-3b123e09e5dc
-md"Here is a table with some acids and their acid constants (``pK_{a}``)."
 
 # ╔═╡ fa8df29f-be0a-498d-8fac-4cbe016f034a
 begin 
-	df = DataFrame(Dict("Acid" => ["HCl","HNO2","HF","HCOOH","CH3COOH"], "pKa" => [-6.0,3.15,3.17,3.75,4.76]))
+	latexacids = [L"\mathrm{HClO_4}",L"\mathrm{HCl}",L"\mathrm{HSO_4^-}",L"\mathrm{HNO_{2}}",L"\mathrm{HF}",L"\mathrm{HCOOH}",L"\mathrm{CH_{3}COOH}"]
+	stringacids = ["HClO4","HCl","HSO4-","HNO2","HF","HCOOH","CH3COOH"]
+	acidmap = Dict(s => l for (s,l) in zip(stringacids, latexacids))
+	df = DataFrame(Dict("Acid" => latexacids, "pKa" => [-10.0,-6.0,1.92,3.15,3.17,3.75,4.76]))
 	#show(df, show_row_number=false) not possible, show() gives Output in Terminal. Also the Strings are dispalyed with "" => Ask Fons
-	# With LatexStrings (L"") possible to display prettier, but then the connection to the dropdown menu is more difficult
 end
 
 # ╔═╡ eb8979e7-b163-435d-a909-f020194ffc15
@@ -267,18 +322,7 @@ Here you can choose from one of the given acids.
 """
 
 # ╔═╡ 563df061-7e97-4745-b101-cf4aa200da60
-@bind Acid Select(["HCl","HNO2","HF","HCOOH","CH3COOH"])
-
-# ╔═╡ 2fa64b35-dd26-4afa-824e-5487ae47b322
-# ╠═╡ disabled = true
-#=╠═╡
-@bind Acid Select([L"\mathrm{HCl}",L"\mathrm{HNO2}",L"\mathrm{HF}",L"\mathrm{HCOOH}",L"\mathrm{CH_{3}COOH}"])
-  ╠═╡ =#
-
-# ╔═╡ d6c30bd1-ebbe-4a8c-8b28-4f089c4d36a2
-md"""
-Titrating a weak acid, which does not protolyse completly, results in a bit more complicated curve. (Anfänglicher pH Wert, Pufferbereich, usw....)
-"""
+@bind Acid Select(stringacids)
 
 # ╔═╡ 006a4f14-2cd1-439f-8b64-aab99601aba8
 md"To plot a titration curve, you need to know the concentration of the acid you are analysing. It is always important to keep the units in mind! Here you can write it down in ``\frac{\text{mol}}{\text{L}}``. Of course in an analytical titration, this is the value you don't know and need to find out."
@@ -294,7 +338,7 @@ md"Additionally, you need to know the volume of the solution you are analysing, 
 
 # ╔═╡ 5b088b11-f0af-461a-bc92-61fbfed0e768
 md"""
-Next, you need to know the concentration of your titrant, in this example the base.
+Next, you need to know the concentration of your titrant, in this example the base, also in ``\frac{\text{mol}}{\text{L}}``.
 """
 
 # ╔═╡ 2e016b07-2ac0-4fd0-9c0a-3062616666f3
@@ -303,7 +347,7 @@ Next, you need to know the concentration of your titrant, in this example the ba
 # ╔═╡ 116a4242-8e26-437d-8ac2-5af5cef9c095
 #Defining constants and parameters (Acid and Base constants, concentrations and volumes)
 begin
-	pKa = filter(row -> row."Acid" == Acid, df)."pKa"[1]; nothing
+	pKa = filter(row -> row."Acid" == acidmap[Acid], df)."pKa"[1]; nothing
 	Ka = 10^(-pKa)
 	pKb = 14 - pKa
 	Kb = 10^(-pKb)
@@ -311,11 +355,11 @@ begin
 	v0_Acid = parse(Float64, v0_Acid_string)
 	c0_Base = parse(Float64, c0_Base_string)
 	v_Base_end = v0_Acid * c0_Acid / c0_Base * 2
-	v_Base::Vector{Float64} = collect(0:0.005:v_Base_end) #Vllt nötig, um auf diesen exakten Punkt zu kommen, an dem der ÄQ Punkt erreicht ist
-	if pKa <= 1.74
+	v_Base::Vector{Float64} = collect(0.0:0.005:v_Base_end)
+	if pKa <= 0 #Very strong acids
 		c0_H⁺::Float64 = c0_Acid*v0_Acid
 		c0_OH⁻::Float64 = 10^(-7)
-	else
+	else #Medium strong and weak acid
 		c0_H⁺::Float64 = -Ka/2 + sqrt(Ka^2 / 4 + Ka*c0_Acid) #The starting concentration for protons (at the same time for the deprotonated acid)
 		c0_OH⁻::Float64 = -Kb/2 + sqrt(Kb^2 / 4 + Kb*c0_Acid) # Concentration of OH⁻ at the EP, after the weak acid is completly neutralised
 	end
@@ -325,7 +369,7 @@ end; nothing
 # define Functions
 begin
 	function calc_pH(v_Base_added::Float64)#v as the elements of the vector v_Base
-		if pKa <= 1.74 #for strong acids
+		if pKa <= 1.74 #for very strong acids
 			if v_Base_added*c0_Base <= v0_Acid*c0_Acid #until the equivalence point (EP) is reached
 				c_H⁺::Float64 = ((c0_Acid * v0_Acid - c0_Base * v_Base_added) / (v0_Acid + v_Base_added)) + 10^(-7)
 			else #after the EP
@@ -333,17 +377,15 @@ begin
 				c_H⁺ = 10^(-14) / c_OH⁻
 			end
 			pH = -log(10, c_H⁺)
-		else #for weak acids
-			# c0_H⁺::Float64 = -Ka/2 + sqrt(Ka^2 / 4 + Ka*c0_Acid) #The starting concentration for protons (at the same time for the deprotonated acid)
-			# c0_OH⁻::Float64 = -Kb/2 + sqrt(Kb^2 / 4 + Kb*c0_Acid) # Concentration of OH⁻ at the EP, after the weak acid is completly neutralised
+		else #for mediumstrong and weak acids
 			if v_Base_added == 0.0 #at the starting point
 				pH = -log(10, c0_H⁺)
-			elseif round((c0_Acid - c0_H⁺)*v0_Acid, digits=3) > round(c0_Base*v_Base_added, digits=3) #between starting point and equivalence point
+			elseif round((c0_Acid - c0_H⁺)*v0_Acid, digits=3) > round(c0_Base*v_Base_added, digits=3) #between starting point and EP
 				c_H⁺ = Ka*(c0_Acid*v0_Acid/(c0_H⁺*v0_Acid+c0_Base*v_Base_added) - 1)
 				pH = -log(10, c_H⁺)
-			elseif round((c0_Acid-c0_H⁺)*v0_Acid, digits=3) == round(c0_Base*v_Base_added, digits=3) #at the equivalence point
+			elseif round((c0_Acid-c0_H⁺)*v0_Acid, digits=3) == round(c0_Base*v_Base_added, digits=3) #at the EP
 				pH = 14 - (-log(10, c0_OH⁻))
-			elseif round((c0_Acid-c0_H⁺)*v0_Acid, digits=3) < round(c0_Base*v_Base_added, digits=3) #after the equivalence point
+			elseif round((c0_Acid-c0_H⁺)*v0_Acid, digits=3) < round(c0_Base*v_Base_added, digits=3) #after the EP
 				c_OH⁻ = (c0_Base * v_Base_added - ((c0_Acid-c0_H⁺) * v0_Acid)) / (v0_Acid + v_Base_added) + c0_OH⁻
 				c_H⁺ = 10^(-14) / c_OH⁻
 				pH = -log(10, c_H⁺)
@@ -352,12 +394,6 @@ begin
 	end
 end ; nothing
 
-# ╔═╡ a44c8c13-006c-482c-b333-240cb3582f7b
-# ╠═╡ disabled = true
-#=╠═╡
-calc_pH(25.0)
-  ╠═╡ =#
-
 # ╔═╡ 7cab03c4-048d-4df7-a3a5-b20dfd1e6e9d
 md"""
 ### Control the added volume and check the indicators
@@ -365,11 +401,11 @@ md"""
 
 # ╔═╡ f2b5c3e7-29c1-4f7b-82bb-cfa8da90d494
 md"""
-Here you can track the titration by visualising the point in the titration curve at a given added volume of titrant. The slider can also be controlled with the arrow keys for more precise control.
+Here you can track the titration by visualising the point in the titration curve at a given added volume of titrant. The slider can also be controlled with the arrow keys for more precise control, which is most iomportant around the equivalence point.
 """
 
 # ╔═╡ 831198d1-d22c-42b5-a198-3bd34139eb0e
-@bind pointX Slider(0:0.05:v_Base_end)
+@bind pointX Slider(0.0:0.05:v_Base_end)
 
 # ╔═╡ 02c0320c-7c56-4fe5-8f8c-9ab0f733b28e
 begin
@@ -384,15 +420,14 @@ begin
 		    ylabel="pH-Value",
 			xlims=(-1,v_Base_end+2),
 			ylims=(0, 14),
-			# xticks=0:0.005:0.06,
-			title="Titration curve of $c0_Acid_string M $Acid against $c0_Base_string M NaOH",
+			title=latexstring("\$\\mathrm{Titration~curve~of~}", c0_Acid_string, "\\mathrm{M~} ", strip(acidmap[Acid], '$'), "\\mathrm{~against~}", c0_Base_string," \\mathrm{M~NaOH}\$"),
 		)
 
 		plot(v_Base, pH_total, label="titration curve", linewidth=2;plot_attrs...)
 		scatter!([pointX], [calc_pH(pointX)], label="Current point of titration")
 
 		if pKa <= 1.74
-			equivalence_volume = 0
+			equivalence_volume = 0.0
 			for i in v_Base
 				if i*c0_Base == v0_Acid*c0_Acid
 					global equivalence_volume = i
@@ -400,8 +435,8 @@ begin
 			end
 			scatter!([equivalence_volume], [calc_pH(equivalence_volume)], label="Equivalence point")
 		else
-			half_equivalence_volume = 0
-			equivalence_volume = 0
+			half_equivalence_volume = 0.0
+			equivalence_volume = 0.0
 			for i in v_Base
 				if round(c0_Acid*v0_Acid/(c0_H⁺*v0_Acid+c0_Base*i), digits=3) == 2.000
 					global half_equivalence_volume = i
@@ -492,6 +527,11 @@ md"""
 md"""
 1) Take a look at the titration of HCl against NaOH at the default volumes and concentrations. Which indicators could you choose? What changes by changing the concentrations and volume of the analyte? Does it affect your choice of indicator? 
 2) Now take a look at the titration of the weak acids against NaOH. Again, check how the concentrations of analyte and titrat and the volume of the analyte affect the curve and your choice of indicator.
+"""
+
+# ╔═╡ d2fe14b6-59a9-4b9d-9028-3c9f41e91d1c
+md"""
+## Appendix
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -1750,18 +1790,21 @@ version = "1.9.2+0"
 # ╟─7205b4a5-d032-43c6-8232-a5d3cffb29d6
 # ╟─d9adecaa-6ae8-46d4-955f-4a89a82a46c9
 # ╟─9264917e-724d-4220-bbee-ec026285e475
+# ╟─4882a030-f1d6-4b8b-a86f-a20e64fe4a6c
+# ╟─733fe755-796d-41db-883a-cfc8d7d077a4
 # ╟─6ba1348c-3cca-46a4-b109-bfb90f7ef7f2
 # ╟─975a203f-e2d8-4f21-a4af-62212c7a9423
 # ╟─7f5a2d2a-62fe-4985-b0fb-8559d9124801
+# ╟─ffe30f1b-cde3-4f41-ac69-70f4d2634b3a
+# ╟─b3420e1d-413e-463b-9bed-ac6182ce863a
+# ╟─512a3218-e9e9-482e-b0b0-59650ea55fd1
+# ╟─724c61e2-7237-4f3e-ab30-655164288aaf
 # ╟─cd5bcc78-ad78-40c8-9356-140a04ea1a69
 # ╟─fa5deb25-ee07-4917-bf57-595bced01394
 # ╟─7c465102-7d68-4827-bd8e-ed8e8ef0e303
-# ╟─753ed8ab-bb6c-4cb6-bb37-3b123e09e5dc
-# ╠═fa8df29f-be0a-498d-8fac-4cbe016f034a
+# ╟─fa8df29f-be0a-498d-8fac-4cbe016f034a
 # ╟─eb8979e7-b163-435d-a909-f020194ffc15
 # ╟─563df061-7e97-4745-b101-cf4aa200da60
-# ╟─2fa64b35-dd26-4afa-824e-5487ae47b322
-# ╟─d6c30bd1-ebbe-4a8c-8b28-4f089c4d36a2
 # ╟─006a4f14-2cd1-439f-8b64-aab99601aba8
 # ╟─41536d79-8949-42ea-971c-8069918c455d
 # ╟─1462be43-386b-4f9a-bae0-304fd058dd93
@@ -1770,7 +1813,6 @@ version = "1.9.2+0"
 # ╟─2e016b07-2ac0-4fd0-9c0a-3062616666f3
 # ╟─116a4242-8e26-437d-8ac2-5af5cef9c095
 # ╟─24bf73c8-e2dc-4181-83e4-59e4b0ef4a48
-# ╠═a44c8c13-006c-482c-b333-240cb3582f7b
 # ╟─7cab03c4-048d-4df7-a3a5-b20dfd1e6e9d
 # ╟─f2b5c3e7-29c1-4f7b-82bb-cfa8da90d494
 # ╟─831198d1-d22c-42b5-a198-3bd34139eb0e
@@ -1779,5 +1821,6 @@ version = "1.9.2+0"
 # ╟─6ebfa6d8-b4a7-4d5e-8d3d-ccf0ba596f25
 # ╟─a7e6ac40-51bd-46d7-a21c-ad294fa23d5a
 # ╟─ab20be4e-d214-4c0e-85df-c293724c978e
+# ╟─d2fe14b6-59a9-4b9d-9028-3c9f41e91d1c
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
