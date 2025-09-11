@@ -1,6 +1,16 @@
 ### A Pluto.jl notebook ###
 # v0.20.17
 
+#> [frontmatter]
+#> language = "en-US"
+#> title = "Simulating titrations"
+#> tags = ["Chemistry"]
+#> date = "2025-09-17"
+#> 
+#>     [[frontmatter.author]]
+#>     name = "Lucas Hildebrandt"
+#>     url = "https://github.com/lucashildebrandt"
+
 using Markdown
 using InteractiveUtils
 
@@ -17,7 +27,7 @@ macro bind(def, element)
 end
 
 # ╔═╡ 185941f6-8fc1-49f7-bc7f-37ffc51d6664
-using Plots, PlutoUI, DataFrames, LaTeXStrings, ColorSchemes
+using Plots, PlutoUI, DataFrames, LaTeXStrings, ColorSchemes, Handcalcs, StructuralUnits
 
 # ╔═╡ 0bc15caa-c795-4369-8cad-efb15fc98875
 PlutoUI.TableOfContents(include_definitions=true)
@@ -347,7 +357,7 @@ Next, you need to know the concentration of your titrant, in this example the ba
 # ╔═╡ 116a4242-8e26-437d-8ac2-5af5cef9c095
 #Defining constants and parameters (Acid and Base constants, concentrations and volumes)
 begin
-	pKa = filter(row -> row."Acid" == acidmap[Acid], df)."pKa"[1]; nothing
+	pKa = filter(row -> row."Acid" == acidmap[Acid], df)."pKa"[1]
 	Ka = 10^(-pKa)
 	pKb = 14 - pKa
 	Kb = 10^(-pKb)
@@ -534,21 +544,77 @@ md"""
 ## Appendix
 """
 
+# ╔═╡ 76baa379-4a48-4268-871e-9e68db92c528
+md"""
+### Modelling the titration curve for strong acids
+"""
+
+# ╔═╡ d2323592-e4eb-4ac1-ab86-741910e1738c
+md"""
+At the beginning (no Base added), the acid dissociates completly and the concentration of hydronium ions is 
+```math
+	c_0\mathrm{(H_3O^+)} = c_0\mathrm{(HA)}
+```
+and therefore the pH value is 
+```math
+	\mathrm{pH} = -\log{c_0\mathrm{(H_3O^+)}}.
+```
+As we only consider a strong base (NaOH), we can also define
+```math
+	c_0\mathrm{(OH^-)} = c_0\mathrm{(NaOH)}.
+```
+While base is added, we need to consider how much hydronium ions are converted.
+The easiest way is to consider the amount of substance 
+```math
+	n\mathrm{(H_3O^+)} = c\mathrm{(H_3O^+)} * V_{\mathrm{total}}
+```
+in the unit ``\text{mol}``. The amount of substance of the added ``\mathrm{(OH^-)}`` can at any point be written as
+```math
+	n\mathrm{(OH^-)} = c_0\mathrm{(NaOH)} * V_{\text{added}}\mathrm{(NaOH)}.
+```
+
+Because the hydronium ions are directly converted, the amount of substance between starting point and equivalence point can be written as
+
+```math
+	n\mathrm{(H_3O^+)} = n_0\mathrm{(H_3O^+)} - n_{\text{added}}\mathrm{(NaOH)}
+	= c_0\mathrm{(H_3O^+)} * V_0{\mathrm{(HA)}} - c_0\mathrm{(OH^-)} * V_{\text{added}}\mathrm{(NaOH)}
+``` 
+HOW DO I GET LINEBREAK INSIDE MATH
+
+
+
+"""
+
+# ╔═╡ 237ac67d-cc07-4262-84a9-44948365a7ac
+# ╠═╡ disabled = true
+#=╠═╡
+let # adding let here to avoid pluto variable clash
+	@handcalcs begin
+	n\mathrm{(H_3O^+)} = n_0\mathrm{(H_3O^+)} - n_{\text{added}}\mathrm{(NaOH)}
+	= c_0\mathrm{(H_3O^+)} * V_0{\mathrm{(HA)}} - c_0\mathrm{(OH^-)} * V_{\text{added}}\mathrm{(NaOH)};
+	end len = :long
+end
+  ╠═╡ =#
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Handcalcs = "e8a07092-c156-4455-ab8e-ed8bc81edefb"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+StructuralUnits = "ec81c399-378c-4a82-baa1-80fb2fc85b6c"
 
 [compat]
 ColorSchemes = "~3.30.0"
 DataFrames = "~1.5.0"
+Handcalcs = "~0.5.2"
 LaTeXStrings = "~1.4.0"
 Plots = "~1.40.19"
 PlutoUI = "~0.7.71"
+StructuralUnits = "~0.2.0"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -557,13 +623,18 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.6"
 manifest_format = "2.0"
-project_hash = "cc0e0e2d35f10eb62bbd02caa3d07856860754e1"
+project_hash = "3c742f1f52ff9c3cfd2af363648b864fe09b4600"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
 git-tree-sha1 = "6e1d2a35f2f90a4bc7c2ed98079b2ba09c35b83a"
 uuid = "6e696c72-6542-2067-7265-42206c756150"
 version = "1.3.2"
+
+[[deps.AbstractTrees]]
+git-tree-sha1 = "2d9c9a55f9c93e8887ad391fbae72f8ef55e1177"
+uuid = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
+version = "0.4.5"
 
 [[deps.AliasTables]]
 deps = ["PtrArrays", "Random"]
@@ -599,6 +670,12 @@ deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jl
 git-tree-sha1 = "fde3bf89aead2e723284a8ff9cdf5b551ed700e8"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.18.5+0"
+
+[[deps.CodeTracking]]
+deps = ["InteractiveUtils", "UUIDs"]
+git-tree-sha1 = "062c5e1a5bf6ada13db96a4ae4749a4c2234f521"
+uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
+version = "1.3.9"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -649,6 +726,11 @@ weakdeps = ["Dates", "LinearAlgebra"]
 
     [deps.Compat.extensions]
     CompatLinearAlgebraExt = "LinearAlgebra"
+
+[[deps.Compiler]]
+git-tree-sha1 = "382d79bfe72a406294faca39ef0c3cef6e6ce1f1"
+uuid = "807dbc54-b67e-4c79-8afb-eafe4df6f2e1"
+version = "0.1.1"
 
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -835,6 +917,12 @@ git-tree-sha1 = "ed5e9c58612c4e081aecdb6e1a479e18462e041e"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 version = "1.10.17"
 
+[[deps.Handcalcs]]
+deps = ["AbstractTrees", "CodeTracking", "InteractiveUtils", "LaTeXStrings", "Latexify", "MacroTools", "PrecompileTools", "Revise", "TestHandcalcFunctions"]
+git-tree-sha1 = "5325cf7101f688daceab06643391af1dc6d6e0e1"
+uuid = "e8a07092-c156-4455-ab8e-ed8bc81edefb"
+version = "0.5.2"
+
 [[deps.HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll"]
 git-tree-sha1 = "f923f9a774fcf3f5cb761bfa43aeadd689714813"
@@ -915,6 +1003,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "e95866623950267c1e4878846f848d94810de475"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "3.1.2+0"
+
+[[deps.JuliaInterpreter]]
+deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
+git-tree-sha1 = "6ac9e4acc417a5b534ace12690bc6973c25b862f"
+uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
+version = "0.10.3"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1058,6 +1152,12 @@ deps = ["Dates", "Logging"]
 git-tree-sha1 = "f02b56007b064fbfddb4c9cd60161b6dd0f40df3"
 uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 version = "1.1.0"
+
+[[deps.LoweredCodeUtils]]
+deps = ["Compiler", "JuliaInterpreter"]
+git-tree-sha1 = "b882a7dd7ef37643066ae8f9380beea8fdd89cae"
+uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
+version = "3.4.2"
 
 [[deps.MIMEs]]
 git-tree-sha1 = "c64d943587f7187e751162b3b84445bbbd79f691"
@@ -1320,6 +1420,18 @@ git-tree-sha1 = "62389eeff14780bfe55195b7204c0d8738436d64"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.3.1"
 
+[[deps.Revise]]
+deps = ["CodeTracking", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "REPL", "Requires", "UUIDs", "Unicode"]
+git-tree-sha1 = "f6f7d30fb0d61c64d0cfe56cf085a7c9e7d5bc80"
+uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
+version = "3.8.0"
+
+    [deps.Revise.extensions]
+    DistributedExt = "Distributed"
+
+    [deps.Revise.weakdeps]
+    Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 version = "0.7.0"
@@ -1406,6 +1518,12 @@ git-tree-sha1 = "725421ae8e530ec29bcbdddbe91ff8053421d023"
 uuid = "892a3eda-7b42-436c-8928-eab12a02cf0e"
 version = "0.4.1"
 
+[[deps.StructuralUnits]]
+deps = ["Reexport", "Unitful", "UnitfulLatexify"]
+git-tree-sha1 = "0e2a61508c26a096c3c032a55f9f997b13011b59"
+uuid = "ec81c399-378c-4a82-baa1-80fb2fc85b6c"
+version = "0.2.0"
+
 [[deps.StyledStrings]]
 uuid = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
 version = "1.11.0"
@@ -1447,6 +1565,11 @@ version = "0.1.1"
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 version = "1.11.0"
+
+[[deps.TestHandcalcFunctions]]
+git-tree-sha1 = "54dac4d0a0cd2fc20ceb72e0635ee3c74b24b840"
+uuid = "6ba57fb7-81df-4b24-8e8e-a3885b6fcae7"
+version = "0.2.4"
 
 [[deps.TranscodingStreams]]
 git-tree-sha1 = "0c45878dcfdcfa8480052b6ab162cdd138781742"
@@ -1811,16 +1934,19 @@ version = "1.9.2+0"
 # ╟─95b20797-e804-4c15-b0d0-7aeb36540234
 # ╟─5b088b11-f0af-461a-bc92-61fbfed0e768
 # ╟─2e016b07-2ac0-4fd0-9c0a-3062616666f3
-# ╟─116a4242-8e26-437d-8ac2-5af5cef9c095
-# ╟─24bf73c8-e2dc-4181-83e4-59e4b0ef4a48
+# ╠═116a4242-8e26-437d-8ac2-5af5cef9c095
+# ╠═24bf73c8-e2dc-4181-83e4-59e4b0ef4a48
 # ╟─7cab03c4-048d-4df7-a3a5-b20dfd1e6e9d
 # ╟─f2b5c3e7-29c1-4f7b-82bb-cfa8da90d494
 # ╟─831198d1-d22c-42b5-a198-3bd34139eb0e
-# ╟─02c0320c-7c56-4fe5-8f8c-9ab0f733b28e
+# ╠═02c0320c-7c56-4fe5-8f8c-9ab0f733b28e
 # ╟─9dee0462-b5af-4962-a65b-7ac7b2faf3df
 # ╟─6ebfa6d8-b4a7-4d5e-8d3d-ccf0ba596f25
 # ╟─a7e6ac40-51bd-46d7-a21c-ad294fa23d5a
 # ╟─ab20be4e-d214-4c0e-85df-c293724c978e
 # ╟─d2fe14b6-59a9-4b9d-9028-3c9f41e91d1c
+# ╟─76baa379-4a48-4268-871e-9e68db92c528
+# ╠═d2323592-e4eb-4ac1-ab86-741910e1738c
+# ╠═237ac67d-cc07-4262-84a9-44948365a7ac
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
